@@ -1,0 +1,62 @@
+<aura:component controller="sunaura.ExpenseController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="sunaura:updateExpenseItem" action="{!c.updateEvent}" />
+
+
+    <aura:attribute name="expenses" type="sunaura__Expense__c[]"/>
+     
+    <aura:attribute name="newExpense" type="sunaura__Expense__c"
+                    default="{'sobjectType':'sunaura__Expense__c',
+                             'Name':'',
+                             'sunaura_Amount__c':0,
+                             'sunaura_Client__c':'',
+                             'sunaura_Date__c':'',
+                             'sunaura_Reimbursed__c':false
+                             }"/>
+    <!-- Attributes for expense counters -->
+    <aura:attribute name="totoal" type="Double" default="0.0" />
+    <aura:attribute name="exp" type="Double" default="0" />
+    
+    <!-- input form using components -->
+    <form>
+    	<fieldset>
+        	<ui:inputText aura:id="expname" label="Expense Name"
+                          class="form-control"
+                          value="{!v.newExpense.name}"
+                          placeholder="My Expense" required="true" />
+            <ui:inputText aura:id="amount" label="Amount"
+                          class="form-control"
+                          value="{!v.newExpense.sunaura_Amount__c}"
+                          placeholder="20.80" required="true" />
+            <ui:inputText aura:id="client" label="Client"
+                          class="form-control"
+                          value="{!v.newExpense.sunaura_Client__c}"
+                          placeholder="ABC co." required="true" />
+            <ui:inputDateTime aura:id="expDate" label="Expense Date"
+                          class="form-control"
+                          value="{!v.newExpense.sunaura_Date__c}"
+                          displayDatePicker="true" />
+            <ui:inputCheckbox aura:id="reimbursed" label="Reimbursed?"
+                              value="{!v.newExpense.sunaura_Reimbursed__c}" />
+            <ui:button label="Submit" press="{!v.createExpenses}"/>
+            
+        </fieldset>
+    </form>
+    
+    <!-- Expense Counters -->
+	<div class="row">
+        <!-- Change the counter color to red if total amount is more than 100 -->
+        <div class="{!v.total >= 100 ? 'alert alert-danger' : 'alert alert-success'}">
+        <h3>Total Expenses</h3>$<ui:outputNumber value="{!v.total}" format=".00"/>
+        </div>
+        <div class="alert alert-success">
+        <h3>No. of Expenses</h3><ui:outputNumber value="{!v.exp}"/>
+        </div>
+	</div>
+    <!-- Display expense records -->
+	<div class="row">
+        <aura:iteration items="{!v.expenses}" var="expense">
+        <sunaura:expenseList expense="{!expense}"/>
+        </aura:iteration>
+    </div>
+</aura:component>

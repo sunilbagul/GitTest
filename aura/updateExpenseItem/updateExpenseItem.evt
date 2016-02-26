@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION">
+<aura:attribute name="expense" type="sunaura.Expense__c"/>
+
+</aura:event>
